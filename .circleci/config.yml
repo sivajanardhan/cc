@@ -2,12 +2,13 @@ version: 2.1
 jobs:
   build_test:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:12
     steps:
       - checkout
       - run:
-          name: Install Dependencies
-          command: npm install --save
+          name: Install npm dependencies
+          command: |
+            npm install --save	
   build_docker_image:
     docker:
       - image: circleci/node:12
@@ -16,14 +17,14 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: false
       - run:
-          name: Build Docker Image
+          name: Build Docker image
           command: |
-            docker build -t demo_nodejs_webapp1 -t sivajanardhan/demo_nodejs_webapp1:latest .
-            echo $DOCKERHUB_PASS | docker login -u sivajanardhan --password-stdin
-            docker push sivajanardhan/demo_nodejs_webapp1:latest
+            docker build -t nodejswebapp1 -t adijaiswal/nodejswebapp1:latest .
+            echo $DOCKER_PASSWORD | docker login -u adijaiswal --password-stdin
+            docker push adijaiswal/nodejswebapp1:latest
+
 workflows:
   build_test:
     jobs:
       - build_test
       - build_docker_image
-          
